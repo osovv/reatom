@@ -1,5 +1,37 @@
 # Changelog
 
+## [3.15.0](https://github.com/osovv/reatom/compare/jsx-v3.14.0...jsx-v3.15.0) (2024-10-25)
+
+
+### Features
+
+* **jsx:** add automatic input type def for a model ([e906142](https://github.com/osovv/reatom/commit/e90614230ded105812ef9e06cdb3af833852cd33))
+* **jsx:** add FC type ([2d3e1b3](https://github.com/osovv/reatom/commit/2d3e1b3a3efef815e9ba1ed677e7b0a6edcd66f0))
+* **jsx:** add MouseEventHandler type ([4c9ea78](https://github.com/osovv/reatom/commit/4c9ea783c83ac6c425d4215f5372d3e4abda5b3c))
+* **jsx:** add ref cleanup callback ([73111a0](https://github.com/osovv/reatom/commit/73111a0e290ed698eeed0d35e5a9e5bb8eda95c7))
+* **jsx:** complete jsx renderer ([#733](https://github.com/osovv/reatom/issues/733)) ([f251172](https://github.com/osovv/reatom/commit/f251172ead5a386ec95e145ccc12845b428d93da))
+* **jsx:** handle falsy like React ([#861](https://github.com/osovv/reatom/issues/861)) ([ad52a74](https://github.com/osovv/reatom/commit/ad52a74b8104301b702d503f050b31754c2816d4))
+* **jsx:** huge refactor, add css support ([8e0019e](https://github.com/osovv/reatom/commit/8e0019e17299eba58d897eda18affb56c5de8b71))
+* **jsx:** support 'style' and 'styles' props ([#674](https://github.com/osovv/reatom/issues/674)) ([a3ad7d8](https://github.com/osovv/reatom/commit/a3ad7d8a5407635b876869ba5b9ab097a0f6835e))
+* **jsx:** support array children ([c555206](https://github.com/osovv/reatom/commit/c555206b4349494912cc278b5157d9b167cc54a0))
+* **jsx:** support reatomLinkedList ([0e027e8](https://github.com/osovv/reatom/commit/0e027e8317e10a59b9f65b0ec1070e3a5637aeca))
+
+
+### Bug Fixes
+
+* esm module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **jsx:** better ref unmount hook ([#906](https://github.com/osovv/reatom/issues/906)) ([cbcc564](https://github.com/osovv/reatom/commit/cbcc564cad4e1084c5953d92dd02d15ac1a0ee31))
+* **jsx:** bool attribute ([0e1ca0f](https://github.com/osovv/reatom/commit/0e1ca0f08e464b4bfd040450b71f8a1ee9aa91d8))
+* **jsx:** fix $attrs ([#681](https://github.com/osovv/reatom/issues/681)) ([d21daa1](https://github.com/osovv/reatom/commit/d21daa1fed6f26d61afccb6d546773f866ffcf84))
+* **jsx:** fix replace css property ([#908](https://github.com/osovv/reatom/issues/908)) ([15e2dc7](https://github.com/osovv/reatom/commit/15e2dc79cc412fb9cb0e1887334a6a18e3fd9ccf))
+* **jsx:** mount fragment as child ([#782](https://github.com/osovv/reatom/issues/782)) ([33a0fda](https://github.com/osovv/reatom/commit/33a0fda91bd1ed5a384d8214baa08f0b295861f2))
+* **jsx:** remove wrong capture types ([7cd9984](https://github.com/osovv/reatom/commit/7cd99848e22eb6d307fc4e6ee04cc6cab68585c2))
+* **jsx:** render Atom&lt;SVGElement&gt; ([#869](https://github.com/osovv/reatom/issues/869)) ([3db6ce8](https://github.com/osovv/reatom/commit/3db6ce87dd0af2395f127561a7b098a7f64f34c0))
+* **jsx:** types ([f2dc64b](https://github.com/osovv/reatom/commit/f2dc64b04dcc8393cdcf45390ad352e97477a522))
+* **jsx:** unsubscribe when removing a parent element ([#919](https://github.com/osovv/reatom/issues/919)) ([ec71d33](https://github.com/osovv/reatom/commit/ec71d337be35ed2e9fd0bf6da6b13317238636e3))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/osovv/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+
 ## [3.14.0](https://github.com/artalar/reatom/compare/jsx-v3.13.1...jsx-v3.14.0) (2024-10-08)
 
 
