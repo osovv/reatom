@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.7.0](https://github.com/osovv/reatom/compare/devtools-v0.6.2...devtools-v0.7.0) (2024-10-25)
+
+
+### Features
+
+* **devtools:** add graph view ([3b5a3d7](https://github.com/osovv/reatom/commit/3b5a3d71f8e98ea0760399935deae1f93c6fa973))
+* **devtools:** connectDevtools returns log function ([ea8194b](https://github.com/osovv/reatom/commit/ea8194b0d865677357272b9273434be490dce039))
+* **devtools:** exclude filters ([873df31](https://github.com/osovv/reatom/commit/873df31389050a2f160733a42b87bf31988c78a0))
+* **devtools:** foldable actions and filters ([9442e27](https://github.com/osovv/reatom/commit/9442e27b73bc6e50919b019d5bf9abca4e7986fb))
+* **devtools:** foldable actions and filters ([fc76711](https://github.com/osovv/reatom/commit/fc76711714f6a8e729712fdb81b9fbf5f844842d))
+* **devtools:** graph view ([95b55f8](https://github.com/osovv/reatom/commit/95b55f8133c14d68c43707361caa0c5c0174b564))
+* **devtools:** highlight color selector ([eacdb02](https://github.com/osovv/reatom/commit/eacdb020f7fbd2b37ebdfe6606ff4d4d6166090f))
+* **devtools:** init ([7c38d65](https://github.com/osovv/reatom/commit/7c38d65ea8b0a76589dec7423c17a63b7822fa9e))
+* **devtools:** support separator function ([563ce6e](https://github.com/osovv/reatom/commit/563ce6effc0f3ccd7dfe925ebab10a846e3df2b9))
+
+
+### Bug Fixes
+
+* **devtools:** another huge refactoring ([308a70b](https://github.com/osovv/reatom/commit/308a70bcf5e8c038acfb5c85083a5f1480a85b2a))
+* **devtools:** cause lines dependencies ([0d46dd0](https://github.com/osovv/reatom/commit/0d46dd07491bd724900322811eb58c0f2c179bd2))
+* **devtools:** filters enum ([0604a16](https://github.com/osovv/reatom/commit/0604a166c8cc0905a1c0538606784f3660692878))
+* **devtools:** filters highlight ([9968f31](https://github.com/osovv/reatom/commit/9968f31fdf85154d87858ef39310428dc03340c8))
+* **devtools:** graph view filters ([1149751](https://github.com/osovv/reatom/commit/114975115687f355b96eef35308e2c799050f2c6))
+* **devtools:** improve styles and small other fixes ([eea2edb](https://github.com/osovv/reatom/commit/eea2edb64e1e50dfc73ba950f0bca8ef38fb135e))
+* **devtools:** increase lines gap ([dc8407d](https://github.com/osovv/reatom/commit/dc8407d85c464ec845b5d25fdfdbfaa013a29bc1))
+* **devtools:** lines drawing ([d5a6283](https://github.com/osovv/reatom/commit/d5a62838ee7861a07c2a3554e37c0fe5b58a416e))
+* **devtools:** perf optimizations ([042a77c](https://github.com/osovv/reatom/commit/042a77cc1399bf0abc32489371c1ee2cd7ca5027))
+* **devtools:** remove log ([24d6146](https://github.com/osovv/reatom/commit/24d61463a329e343ab467dc20f92539933853a66))
+* **devtools:** reset styles on root ([1c36410](https://github.com/osovv/reatom/commit/1c36410962bcc075927319e6f5e3cffcca591f4c))
+* **devtools:** restore missed styles ([4e81a31](https://github.com/osovv/reatom/commit/4e81a318d7cea0fd01c1d770edd720db4c2c5ace))
+* **devtools:** search matching ([eedb14d](https://github.com/osovv/reatom/commit/eedb14dd1404a60c38aeae5e7a1ca1a5e1f038dd))
+* **devtools:** styles ([e0b9cf8](https://github.com/osovv/reatom/commit/e0b9cf8f3d781676cd4bed8266896f24ee06b9ca))
+* **devtools:** styles and logs improvements ([5e6428a](https://github.com/osovv/reatom/commit/5e6428a79dfcfd8b07d1ad892b8d4153f651cf7d))
+* **devtools:** timestamps and sticky scroll ([631d096](https://github.com/osovv/reatom/commit/631d096a6740acc8ce5958a5ccf8dcb445ef8cdd))
+* **devtools:** types declarations ([e98e758](https://github.com/osovv/reatom/commit/e98e7583cc86b4f7019ccf182843ca12023f5174))
+* esm module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/osovv/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+
 ## [0.6.2](https://github.com/artalar/reatom/compare/devtools-v0.6.1...devtools-v0.6.2) (2024-10-14)
 
 
