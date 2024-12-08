@@ -57,6 +57,8 @@ export const withBatching = (ctx: Ctx): Ctx => {
   }
 }
 
+const anonFnName = (() => () => {})().name
+
 export const reatomContext = React.createContext<null | Ctx>(null)
 
 export const useCtx = (): Ctx => {
@@ -217,6 +219,7 @@ export const reatomComponent = <T extends object>(
   name?: string,
 ): ((props: T extends PropsWithCtx<infer P> ? P : T) => JSX.Element) => {
   if (name) name = `Component.${name}`
+  else if (Component.name !== anonFnName) name = Component.name
   else name = __count('Component')
 
   let rendering = false
