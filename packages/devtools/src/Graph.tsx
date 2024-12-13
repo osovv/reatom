@@ -220,7 +220,7 @@ export const Graph = ({ clientCtx, getColor, width, height }: Props) => {
     return search.length < 2 ? '' : search.toLocaleLowerCase()
   })
 
-  const inspector = reatomInspector({ filters }, `${name}.inspector`)
+  const inspector = reatomInspector({ clientCtx, filters }, `${name}.inspector`)
 
   const listHeight = reatomResource(async (ctx) => {
     ctx.spy(list)
