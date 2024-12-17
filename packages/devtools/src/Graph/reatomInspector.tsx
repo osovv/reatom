@@ -1,4 +1,4 @@
-import { __root, action, atom, AtomCache, Ctx, parseAtoms, withReset } from '@reatom/framework'
+import { __root, action, atom, AtomCache, AtomProto, Ctx, parseAtoms, withReset } from '@reatom/framework'
 import { h, hf, JSX } from '@reatom/jsx'
 import { ObservableHQ, ObservableHQActionButton } from '../ObservableHQ'
 import { reatomFilters } from './reatomFilters'
@@ -9,6 +9,15 @@ type InspectorState =
   | { kind: 'hidden' }
   | { kind: 'open'; patch: AtomCache }
   | { kind: 'fixed'; patch: AtomCache; element: HTMLElement }
+
+// separate action for naming purpose, CALL ONLY WITH `clientCtx`
+export const update = action((ctx, proto: AtomProto, value: string) => {
+  ctx.get((read, actualize) => {
+    actualize!(ctx, proto, (patchCtx: Ctx, patch: AtomCache) => {
+      patch.state = JSON.parse(value)
+    })
+  })
+}, 'update')
 
 export const reatomInspector = (
   { clientCtx, filters }: { clientCtx: Ctx; filters: ReturnType<typeof reatomFilters> },
@@ -115,16 +124,6 @@ export const reatomInspector = (
     })
   }, `${name}.close`)
 
-  // separate action for naming purpose, CALL ONLY WITH `clientCtx`
-  const update = action((ctx, value: string) => {
-    ctx.get((read, actualize) => {
-      const proto = ctx.get(patch)?.proto!
-      actualize!(ctx, proto, (patchCtx: Ctx, patch: AtomCache) => {
-        patch.state = JSON.parse(value)
-      })
-    })
-  }, `${name}.update`)
-
   const OPACITY = {
     hidden: '0',
     open: '0.8',
@@ -221,7 +220,7 @@ export const reatomInspector = (
               const proto = ctx.get(patch)?.proto
               const textarea = e.currentTarget.firstChild
               if (proto && textarea instanceof HTMLTextAreaElement) {
-                update(clientCtx, textarea.value)
+                update(clientCtx, proto, textarea.value)
                 textarea.value = ctx.get(json)
               }
             }}

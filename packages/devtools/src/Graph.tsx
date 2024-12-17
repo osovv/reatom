@@ -24,9 +24,10 @@ type Props = {
   getColor: typeof getColor
   width: Atom<string>
   height: Atom<string>
+  initSize: number
 }
 
-export const Graph = ({ clientCtx, getColor, width, height }: Props) => {
+export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) => {
   const name = '_ReatomDevtools.Graph'
 
   const list = reatomLinkedList(
@@ -211,7 +212,7 @@ export const Graph = ({ clientCtx, getColor, width, height }: Props) => {
   const redrawLines = action((ctx) => lines.redraw(ctx, svg), `${name}.redrawLines`)
 
   const filters = reatomFilters(
-    { list: list as unknown as LinkedListAtom, clearLines: lines.clear, redrawLines },
+    { list: list as unknown as LinkedListAtom, clearLines: lines.clear, redrawLines, initSize },
     `${name}.filters`,
   )
   const valuesSearch = atom((ctx) => {
@@ -228,10 +229,12 @@ export const Graph = ({ clientCtx, getColor, width, height }: Props) => {
     ctx.spy(height)
     parseAtoms(ctx, filters)
     await ctx.schedule(() => new Promise((r) => requestAnimationFrame(r)))
+    // TODO: the second one is required in Firefox
+    await ctx.schedule(() => new Promise((r) => requestAnimationFrame(r)))
     return `${listEl.getBoundingClientRect().height}px`
   }, `${name}.listHeight`).pipe(withDataAtom('0px')).dataAtom
 
-  const subscribe = () =>
+  // const subscribe = () =>
     clientCtx.subscribe(async (logs) => {
       // sort causes and insert only from this transaction
       const insertTargets = new Set<AtomCache>()
@@ -322,7 +325,7 @@ export const Graph = ({ clientCtx, getColor, width, height }: Props) => {
 
   const listEl = (
     <ul
-      ref={subscribe}
+      // ref={subscribe}
       css={`
         padding: 0;
         content-visibility: auto;
