@@ -147,8 +147,14 @@ export const take = <T extends Atom, Res = AtomReturn<T>>(
   ctx: Ctx,
   anAtom: T,
   mapper: Fn<[Ctx, Awaited<AtomReturn<T>>, skip], Res | skip> = (ctx, v: any) => v,
+  name?: string,
 ): Promise<Awaited<Res>> => {
+  name &&= `${ctx.cause.proto.name}.${name}`
+
   const cleanups: Array<Fn> = []
+
+  if (name) action(name)(ctx)
+
   return new Promise<Awaited<Res>>((res: Fn, rej) => {
     cleanups.push(
       onCtxAbort(ctx, rej) ?? noop,
@@ -160,9 +166,13 @@ export const take = <T extends Atom, Res = AtomReturn<T>>(
           if (anAtom.__reatom.isAction) state = state[0].payload
           const value = await state
           const result = mapper(ctx, value, skip)
-          if (result !== skip) res(result)
+          if (result !== skip) {
+            res(result)
+            if (name) action<any>(`${name}.resolve`)(ctx, result)
+          }
         } catch (error) {
           rej(error)
+          if (name) action<any>(`${name}.reject`)(ctx, error)
         }
       }),
     )
