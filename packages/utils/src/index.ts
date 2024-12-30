@@ -1,3 +1,5 @@
+import { _setTimeout } from './setTimeout'
+
 export type UndefinedToOptional<T extends object> = Partial<T> & PickValues<T, {} | null>
 
 // We don't have type literal for NaN but other values are presented here
@@ -268,19 +270,16 @@ export const throwAbort = (message: string, controller?: AbortController): never
   throw error
 }
 
-export const setTimeout: typeof globalThis.setTimeout = Object.assign(
-  (...a: Parameters<typeof globalThis.setTimeout>) => {
-    const intervalId = globalThis.setTimeout(...a)
-    return typeof intervalId === 'number'
-      ? intervalId
-      : Object.assign(intervalId, {
-          toJSON() {
-            return -1
-          },
-        })
-  },
-  globalThis.setTimeout,
-)
+export const setTimeout: typeof _setTimeout = Object.assign((...a: Parameters<typeof _setTimeout>) => {
+  const intervalId = _setTimeout(...a)
+  return typeof intervalId === 'number'
+    ? intervalId
+    : Object.assign(intervalId, {
+        toJSON() {
+          return -1
+        },
+      })
+}, _setTimeout)
 
 /** @link https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#maximum_delay_value */
 export const MAX_SAFE_TIMEOUT = 2 ** 31 - 1
