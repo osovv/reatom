@@ -52,7 +52,7 @@ Than you can bind `subscribe` and `set` (for mutable atoms) to your atoms by `wi
 </button>
 ```
 
-Of course, you could describe atoms as a [separate module](/guides/architecture) and bind actions with the same `withSvelte(anAction).set`.
+Of course, you could describe atoms in a separate module and bind actions with the same `withSvelte(anAction).set`.
 
 [repl](https://svelte.dev/repl/416d3e07447440729416e77e45071b87?version=3.55.0).
 

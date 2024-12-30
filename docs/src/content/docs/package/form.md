@@ -50,7 +50,7 @@ export const passwordField = loginForm.reatomField(
 )
 ```
 
-You could find more examples in [reatom/form-web](/package/form-web/) package.
+<!-- You could find more examples in [reatom/form-web](/package/form-web/) package. -->
 
 ### Form API
 

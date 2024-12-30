@@ -19,7 +19,7 @@ The raw API description is [below](#atom-api).
 
 Reatom allows you to describe both simple and complex logic using three main components: **atoms** for data reference, **actions** for logic processing, and **context** (`ctx`) for system isolation. This core is a perfect solution for building your own high-order library or an entire framework, with all the packages built on top of it.
 
-Reatom is inspired by the React and Redux architectures. All processed data should be [immutable](https://developer.mozilla.org/en-US/docs/Glossary/Immutable), computations should be pure, and all side effects should be scheduled for a separate effects queue using `ctx.schedule(callback)`. Only consistent data transactions should be applied. All prerequisites can be checked in this article: [What is a state manager](/general/what-is-state-manager).
+Reatom is inspired by the React and Redux architectures. All processed data should be [immutable](https://developer.mozilla.org/en-US/docs/Glossary/Immutable), computations should be pure, and all side effects should be scheduled for a separate effects queue using `ctx.schedule(callback)`. Only consistent data transactions should be applied. All prerequisites can be checked in this article: [What is a state manager](/blog/what-is-state-manager).
 
 ## Installation
 
