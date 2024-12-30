@@ -62,4 +62,16 @@ test('mockAction', () => {
   ;`👍` //?
 })
 
+test('mock computed atom', () => {
+  const testAtom = atom<string>(() => {
+    throw new Error('unreachable')
+  }, 'testAtom')
+
+  const ctx = createTestCtx()
+
+  ctx.mock(testAtom, 'mocked')
+
+  assert.is(ctx.get(testAtom), 'mocked')
+})
+
 test.run()
