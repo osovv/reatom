@@ -2,18 +2,7 @@ import { test } from 'uvu'
 import * as assert from 'uvu/assert'
 import { mockFn } from '@reatom/testing'
 
-import {
-  action,
-  Atom,
-  atom,
-  AtomProto,
-  AtomMut,
-  createCtx as _createCtx,
-  Ctx,
-  CtxSpy,
-  Fn,
-  AtomCache,
-} from './atom'
+import { action, Atom, atom, AtomProto, AtomMut, createCtx as _createCtx, Ctx, CtxSpy, Fn, AtomCache } from './atom'
 
 const callSafelySilent = (fn: Fn, ...a: any[]) => {
   try {
@@ -43,13 +32,16 @@ const createCtx: typeof _createCtx = (opts) =>
   }
 }
 
-export const isConnected = (ctx: Ctx, { __reatom: proto }: Atom) => {
+const isConnected = (ctx: Ctx, { __reatom: proto }: Atom) => {
   const cache = proto.patch ?? ctx.get((read) => read(proto))
 
   if (!cache) return false
 
   return cache.subs.size + cache.listeners.size > 0
 }
+
+export const getCache = <T>(ctx: Ctx, anAtom: Atom<T>): AtomCache<T> =>
+  ctx.get((read) => (ctx.get(anAtom), read(anAtom.__reatom)!))
 
 test(`action`, () => {
   const act1 = action()
@@ -91,9 +83,7 @@ test(`linking`, () => {
   const fn = mockFn()
 
   ctx.subscribe((logs) => {
-    logs.forEach((patch) =>
-      assert.is.not(patch.cause, null, `"${patch.proto.name}" cause is null`),
-    )
+    logs.forEach((patch) => assert.is.not(patch.cause, null, `"${patch.proto.name}" cause is null`))
   })
 
   const un = ctx.subscribe(a2, fn)
@@ -126,34 +116,19 @@ test(`nested deps`, () => {
   const touchedAtoms: Array<AtomProto> = []
 
   ctx.subscribe((logs) => {
-    logs.forEach((patch) =>
-      assert.is.not(patch.cause, null, `"${patch.proto.name}" cause is null`),
-    )
+    logs.forEach((patch) => assert.is.not(patch.cause, null, `"${patch.proto.name}" cause is null`))
   })
 
   const un = ctx.subscribe(a6, fn)
 
   for (const a of [a1, a2, a3, a4, a5, a6]) {
-    assert.is(
-      isConnected(ctx, a),
-      true,
-      `"${a.__reatom.name}" should not be stale`,
-    )
+    assert.is(isConnected(ctx, a), true, `"${a.__reatom.name}" should not be stale`)
   }
 
   assert.is(fn.calls.length, 1)
-  assert.equal(
-    ctx.get((read) => read(a1.__reatom))!.subs,
-    new Set([a2.__reatom, a3.__reatom]),
-  )
-  assert.equal(
-    ctx.get((read) => read(a2.__reatom))!.subs,
-    new Set([a4.__reatom, a5.__reatom]),
-  )
-  assert.equal(
-    ctx.get((read) => read(a3.__reatom))!.subs,
-    new Set([a4.__reatom, a5.__reatom]),
-  )
+  assert.equal(ctx.get((read) => read(a1.__reatom))!.subs, new Set([a2.__reatom, a3.__reatom]))
+  assert.equal(ctx.get((read) => read(a2.__reatom))!.subs, new Set([a4.__reatom, a5.__reatom]))
+  assert.equal(ctx.get((read) => read(a3.__reatom))!.subs, new Set([a4.__reatom, a5.__reatom]))
 
   ctx.subscribe((logs) => logs.forEach(({ proto }) => touchedAtoms.push(proto)))
 
@@ -165,11 +140,7 @@ test(`nested deps`, () => {
   un()
 
   for (const a of [a1, a2, a3, a4, a5, a6]) {
-    assert.is(
-      isConnected(ctx, a),
-      false,
-      `"${a.__reatom.name}" should be stale`,
-    )
+    assert.is(isConnected(ctx, a), false, `"${a.__reatom.name}" should be stale`)
   }
   ;`👍` //?
 })
@@ -244,19 +215,10 @@ test(`late effects batch`, async () => {
 test(`display name`, () => {
   const firstNameAtom = atom(`John`, `firstName`)
   const lastNameAtom = atom(`Doe`, `lastName`)
-  const isFirstNameShortAtom = atom(
-    (ctx) => ctx.spy(firstNameAtom).length < 10,
-    `isFirstNameShort`,
-  )
-  const fullNameAtom = atom(
-    (ctx) => `${ctx.spy(firstNameAtom)} ${ctx.spy(lastNameAtom)}`,
-    `fullName`,
-  )
+  const isFirstNameShortAtom = atom((ctx) => ctx.spy(firstNameAtom).length < 10, `isFirstNameShort`)
+  const fullNameAtom = atom((ctx) => `${ctx.spy(firstNameAtom)} ${ctx.spy(lastNameAtom)}`, `fullName`)
   const displayNameAtom = atom(
-    (ctx) =>
-      ctx.spy(isFirstNameShortAtom)
-        ? ctx.spy(fullNameAtom)
-        : ctx.spy(firstNameAtom),
+    (ctx) => (ctx.spy(isFirstNameShortAtom) ? ctx.spy(fullNameAtom) : ctx.spy(firstNameAtom)),
     `displayName`,
   )
   const effect = mockFn()
@@ -301,9 +263,7 @@ test(`display name`, () => {
 test(// this test written is more just for example purposes
 `dynamic lists`, () => {
   const listAtom = atom(new Array<AtomMut<number>>())
-  const sumAtom = atom((ctx) =>
-    ctx.spy(listAtom).reduce((acc, a) => acc + ctx.spy(a), 0),
-  )
+  const sumAtom = atom((ctx) => ctx.spy(listAtom).reduce((acc, a) => acc + ctx.spy(a), 0))
   const ctx = createCtx()
   const sumListener = mockFn((sum: number) => {})
 
@@ -351,11 +311,7 @@ test('async cause track', () => {
 
   act1(ctx)
 
-  assert.is(
-    track.lastInput().find((patch: AtomCache) => patch.proto.name === 'a1')
-      ?.cause.proto.name,
-    'act2',
-  )
+  assert.is(track.lastInput().find((patch: AtomCache) => patch.proto.name === 'a1')?.cause.proto.name, 'act2')
   ;`👍` //?
 })
 
@@ -364,9 +320,7 @@ test('disconnect tail deps', () => {
   const track = mockFn((ctx: CtxSpy) => ctx.spy(aAtom))
   const bAtom = atom(track, 'bAtom')
   const isActiveAtom = atom(true, 'isActiveAtom')
-  const bAtomControlled = atom((ctx, state?: any) =>
-    ctx.spy(isActiveAtom) ? ctx.spy(bAtom) : state,
-  )
+  const bAtomControlled = atom((ctx, state?: any) => (ctx.spy(isActiveAtom) ? ctx.spy(bAtom) : state))
   const ctx = createCtx()
 
   ctx.subscribe(bAtomControlled, () => {})
@@ -384,9 +338,7 @@ test('deps shift', () => {
   const deps = [atom(0), atom(0), atom(0)]
   const track = mockFn()
 
-  deps.forEach((dep, i) =>
-    (dep.__reatom.disconnectHooks ??= new Set()).add(() => track(i)),
-  )
+  deps.forEach((dep, i) => (dep.__reatom.disconnectHooks ??= new Set()).add(() => track(i)))
 
   const a = atom((ctx) => deps.forEach((dep) => ctx.spy(dep)))
   const ctx = createCtx()
@@ -555,9 +507,7 @@ test('no extra tick by schedule', async () => {
 
   let isDoneAsyncInTr = false
   const ctx = createCtx()
-  ctx.get(() =>
-    ctx.schedule(async () => {}).then(() => (isDoneAsyncInTr = true)),
-  )
+  ctx.get(() => ctx.schedule(async () => {}).then(() => (isDoneAsyncInTr = true)))
 
   await null
   await null
@@ -770,6 +720,32 @@ test('nested condition branches', () => {
   assert.not.ok(isConnected(ctx, b))
   assert.ok(isConnected(ctx, c))
   ;`👍` //?
+})
+
+test('disconnect of the last version of pubs', async () => {
+  const ctx = createCtx()
+
+  let logs = new Array<string>()
+
+  const flagAtom = atom(false, 'flagAtom')
+
+  const endAtom = atom((ctx) => {
+    if (!ctx.spy(flagAtom)) return ''
+
+    const depAtom = atom('dep', 'depAtom')
+    onDisconnect(depAtom, () => logs.push('dep disconnected'))
+
+    return ctx.spy(depAtom)
+  }, 'endAtom')
+
+  onDisconnect(endAtom, () => logs.push('end disconnected'))
+
+  const uns = ctx.subscribe(endAtom, (state) => logs.push(state))
+  flagAtom(ctx, true)
+
+  uns()
+
+  assert.equal(logs, ['', 'dep', 'end disconnected', 'dep disconnected'])
 })
 
 // test(`maximum call stack`, () => {
