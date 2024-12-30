@@ -5,9 +5,10 @@ description: General introduction to state management and reactive programming
 
 ## The disunity
 
-There are a lot of articles around "state" term and a lof of libraries which interprets "state management" in a different ways. Somebody separates network cache and local states in a different categories. Somebody didn't see a borders between any kind of data sources, by focusing on reactivity.
 
-This article generalize observation of our industry and trying to find the base of FRP, OORP, cache invalidation strategies and data management as it is. There are intentionally a lot of dry definitions without examples to save the size and show only the important.
+The term "state" has become widely discussed, with numerous articles and libraries offering various interpretations of "state management". Some approaches separate network cache and local state into distinct categories, while others view all data sources as interconnected, focusing instead on reactivity.
+
+This article aims to distill insights from the industry to identify the foundations of Functional Reactive Programming (FRP), Object-Oriented Reactive Programming (OORP), cache invalidation strategies, and data management principles. Purposefully concise and definition-focused, it omits examples to keep the content brief, highlighting only the essential concepts.
 
 ## Reactivity
 
