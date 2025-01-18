@@ -3,6 +3,9 @@ import { h, hf, JSX, css } from '@reatom/jsx'
 import { reatomZod, ZodAtomization } from '@reatom/npm-zod'
 import { z } from 'zod'
 
+import * as icons from './icons'
+import { Lines } from './reatomLines'
+
 export const Filter = z.object({
   name: z.string().readonly(),
   search: z.string(),
@@ -66,74 +69,72 @@ const FilterView = ({ id, filter, remove }: { id: string; filter: Filter; remove
         aria-label="match"
         disabled={atom((ctx) => ctx.spy(filter.type) === 'match')}
         on:click={filter.type.setMatch}
-      >
-        =
-      </FilterButton>
+        css:background={icons.matchIcon}
+      />
       <FilterButton
         title="not match"
         aria-label="not match"
         disabled={atom((ctx) => ctx.spy(filter.type) === 'mismatch')}
         on:click={filter.type.setMismatch}
-      >
-        ≠
-      </FilterButton>
-      <FilterButton
-        isInput
-        title="highlight"
-        aria-label="highlight"
-        type="color"
-        on:click={(ctx, e) => {
-          if (ctx.get(filter.type) !== 'highlight') {
-            filter.type.setHighlight(ctx)
-            e.preventDefault()
-          }
-        }}
-        model:value={filter.color}
+        css:background={icons.notMatchIcon}
+      />
+      <span
         data-highlight={atom((ctx) => ctx.spy(filter.type) === 'highlight')}
         css={`
-          font-size: 10px;
-          filter: unset;
+          position: relative;
+          width: 30px;
+          height: 30px;
+          margin-right: 5px;
           border: 2px solid #151134;
+          border-radius: 2px;
+          box-sizing: border-box;
           overflow: hidden;
           &:hover {
             border: 4px solid #151134;
           }
-          &:has(input[data-highlight]) {
+          &[data-highlight] {
             border: 4px double #151134;
           }
-          input {
+        `}
+      >
+        <input
+          title="highlight"
+          aria-label="highlight"
+          type="color"
+          on:click={(ctx, e) => {
+            if (ctx.get(filter.type) !== 'highlight') {
+              filter.type.setHighlight(ctx)
+              e.preventDefault()
+            }
+          }}
+          model:value={filter.color}
+          css={`
             padding: 0;
             border: none;
-            width: 30px;
-            height: 30px;
-            margin: -1px 0 0 -1px;
-          }
-        `}
-      />
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: -6px;
+            left: -6px;
+          `}
+        />
+      </span>
       {!(filter.default && filter.name === '') && (
         <FilterButton
           title="exclude"
           aria-label="exclude"
           disabled={atom((ctx) => ctx.spy(filter.type) === 'exclude')}
           on:click={filter.type.setExclude}
-          css={`
-            font-size: 10px;
-          `}
-        >
-          🗑️
-        </FilterButton>
+          css:background={icons.excludeIcon}
+        />
       )}
       <FilterButton
         title={atom((ctx) => (ctx.spy(filter.type) === 'off' ? 'enable' : 'disable'))}
         aria-label={atom((ctx) => (ctx.spy(filter.type) === 'off' ? 'enable' : 'disable'))}
         disabled={atom((ctx) => ctx.spy(filter.type) === 'off')}
         on:click={filter.type.setOff}
-        css={`
-          margin: 0;
-        `}
-      >
-        {atom((ctx) => (ctx.spy(filter.type) === 'off' ? 'll' : '◼'))}
-      </FilterButton>
+        css:background={icons.stopIcon}
+      />
     </td>
     <td>
       <div
@@ -166,60 +167,44 @@ const FilterView = ({ id, filter, remove }: { id: string; filter: Filter; remove
             title="Remove"
             aria-label="Remove filter"
             on:click={remove}
-          >
-            x
-          </FilterButton>
+            css:background={icons.removeIcon}
+          />
         )}
       </div>
     </td>
   </tr>
 )
 
-const FilterButton = (
-  props: (JSX.IntrinsicElements['button'] & { isInput?: false }) | (JSX.IntrinsicElements['input'] & { isInput: true }),
-) => {
-  if (props.isInput) {
-    return (
-      <span
-        css={`
-          width: 30px;
-          height: 30px;
-          margin-right: 5px;
-          border: 2px solid #151134;
-          border-radius: 2px;
-          box-sizing: border-box;
-          ${props.css || ''}
-        `}
-      >
-        <input {...omit(props, ['isInput', 'css'])} />
-      </span>
-    )
-  }
+const FilterButton = (props: JSX.IntrinsicElements['button'] & { 'css:background': string }) => (
+  <button
+    {...props}
+    css={`
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      margin-right: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-  return (
-    <button
-      {...omit(props, ['isInput'])}
-      css={`
-        width: 30px;
-        height: 30px;
-        padding: 0;
-        margin-right: 5px;
-        border: 2px solid #151134;
-        border-radius: 2px;
-        font-size: 14px;
-        filter: grayscale(1);
-        background: none;
-        &:hover {
-          border: 4px solid #151134;
-        }
-        &[disabled] {
-          border: 4px double #151134;
-        }
-        ${props.css || ''}
-      `}
-    />
-  )
-}
+      background: var(--background);
+      background-size: 80%;
+      background-repeat: no-repeat;
+      background-position: center;
+
+      border: 2px solid #151134;
+      border-radius: 2px;
+
+      &:hover {
+        border: 4px solid #151134;
+      }
+      &[disabled] {
+        border: 4px double #151134;
+      }
+      ${props.css || ''}
+    `}
+  />
+)
 
 const ActionButton = (props: JSX.IntrinsicElements['button']) => (
   <button
@@ -266,12 +251,12 @@ const ActionLabel = (props: JSX.IntrinsicElements['label']) => (
 export const reatomFilters = (
   {
     list,
-    clearLines,
+    lines,
     redrawLines,
     initSize,
   }: {
     list: LinkedListAtom
-    clearLines: Action<[], void>
+    lines: Lines
     redrawLines: Action<[], void>
     initSize: number
   },
@@ -318,7 +303,12 @@ export const reatomFilters = (
   filters.size.onChange(trackSize)
 
   const FiltersComponent = () => (
-    <div>
+    <div css={`
+      & input::placeholder {
+        color: currentColor;
+        opacity: 0.8;
+      }
+    `}>
       <fieldset
         on:click={(ctx, e) => {
           if (e.target === e.currentTarget && ctx.get(filters.folded)) {
@@ -395,6 +385,8 @@ export const reatomFilters = (
         <hr
           css={`
             width: 100%;
+            border-top: 1px solid gray;
+            border-bottom: none;
           `}
         />
         <table
@@ -410,6 +402,13 @@ export const reatomFilters = (
             />
           ))}
         </table>
+        <hr
+          css={`
+            width: 100%;
+            border-top: 1px solid gray;
+            border-bottom: none;
+          `}
+        />
         <input
           title="Search in states"
           aria-label="Search in states"
@@ -419,10 +418,18 @@ export const reatomFilters = (
           css={`
             width: 200px;
             height: 30px;
+            /* margin: 14px 0; */
             padding: 0 4px;
             border: 1px solid #151134;
             border-radius: 2px;
             background: none;
+          `}
+        />
+        <hr
+          css={`
+            width: 100%;
+            border-top: 1px solid gray;
+            border-bottom: none;
           `}
         />
         <div
@@ -435,7 +442,9 @@ export const reatomFilters = (
           `}
         >
           <ActionButton on:click={list.clear}>clear logs</ActionButton>
-          <ActionButton on:click={clearLines}>clear lines</ActionButton>
+          <ActionButton disabled={atom((ctx) => ctx.spy(lines).size === 0)} on:click={lines.clear}>
+            clear lines
+          </ActionButton>
           <ActionLabel>
             <input model:checked={filters.inlinePreview} />
             inline preview
@@ -455,7 +464,7 @@ export const reatomFilters = (
               align-items: center;
             `}
           >
-            {atom((ctx) => `collected ${ctx.spy(list).size} of `)}
+            {atom((ctx) => `logged ${ctx.spy(list).size} of `)}
             <input
               model:valueAsNumber={filters.size}
               css:width={atom((ctx) => `${Math.max(3, ctx.spy(filters.size).toString().length)}em`)}

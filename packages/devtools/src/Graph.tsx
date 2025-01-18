@@ -212,7 +212,7 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
   const redrawLines = action((ctx) => lines.redraw(ctx, svg), `${name}.redrawLines`)
 
   const filters = reatomFilters(
-    { list: list as unknown as LinkedListAtom, clearLines: lines.clear, redrawLines, initSize },
+    { list: list as unknown as LinkedListAtom, lines, redrawLines, initSize },
     `${name}.filters`,
   )
   const valuesSearch = atom((ctx) => {
