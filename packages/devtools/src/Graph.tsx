@@ -257,7 +257,8 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
       const [prev] = historyState ?? []
 
       const isConnection =
-        (patch.proto.isAction && patch.state.length === 0) || (!historyState && patch.cause!.proto.name === 'root')
+        (patch.proto.isAction && !actionsStates.get(patch)?.length) ||
+        (!historyState && patch.cause!.proto.name === 'root')
 
       if (!historyState) history.set(patch.proto, [])
 
