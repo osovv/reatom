@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.8.0](https://github.com/osovv/reatom/compare/eslint-plugin-v3.7.1...eslint-plugin-v3.8.0) (2025-01-20)
+
+
+### Features
+
+* **eslint-plugin:** add async-rule & unit-naming-rule ([#709](https://github.com/osovv/reatom/issues/709)) ([04de10c](https://github.com/osovv/reatom/commit/04de10cb9bd3d39d2deec3ed1a5e0aface9de3c9))
+* **eslint-plugin:** complete unit-naming-rule ([#523](https://github.com/osovv/reatom/issues/523)) ([#920](https://github.com/osovv/reatom/issues/920)) ([590ebbf](https://github.com/osovv/reatom/commit/590ebbf4fe14c649304b77b7815766779c19a078))
+* **eslint-plugin:** enforce domain in names ([#764](https://github.com/osovv/reatom/issues/764)) ([0b4ccff](https://github.com/osovv/reatom/commit/0b4ccffa80fa738233f2160fc9b3a70269c6d4d5))
+
+
+### Bug Fixes
+
+* **eslint-plugin:** typeError in reatom/unit-naming-rule ([#968](https://github.com/osovv/reatom/issues/968)) ([8392593](https://github.com/osovv/reatom/commit/8392593d6caab3136acbe1e77cb28129630d41e4))
+* esm module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/osovv/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+
 ## [3.7.1](https://github.com/artalar/reatom/compare/eslint-plugin-v3.7.0...eslint-plugin-v3.7.1) (2024-11-07)
 
 
