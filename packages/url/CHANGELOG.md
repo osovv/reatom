@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.9.0](https://github.com/osovv/reatom/compare/url-v3.8.0...url-v3.9.0) (2025-01-20)
+
+
+### Features
+
+* **url:** add replace option ([c6ae085](https://github.com/osovv/reatom/commit/c6ae0859fd246135e17379623e91a67ffeedbb59))
+* **url:** add subpath parameter ([#945](https://github.com/osovv/reatom/issues/945)) ([e9d882d](https://github.com/osovv/reatom/commit/e9d882d0749b5aa82a4732d3d02fbd8d65254883))
+* **url:** path instead of path ([526f9a7](https://github.com/osovv/reatom/commit/526f9a73d4f5a4b738a6cb049f616ca4ce79fc03))
+* **url:** stop abortCauseContext propagation ([b8daac9](https://github.com/osovv/reatom/commit/b8daac98b2638fbe170aebed7816afec9e73928f))
+
+
+### Bug Fixes
+
+* esm module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/osovv/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **url:** accept a function in urlAtom update ([5affb85](https://github.com/osovv/reatom/commit/5affb8525fe5629621e0f7fe9b999f1e2306b28e))
+* **url:** computed handling ([80bb777](https://github.com/osovv/reatom/commit/80bb777215842684cefbf0cc5bbbd5bd2ab791e0))
+* **url:** setting reinitialization ([742b303](https://github.com/osovv/reatom/commit/742b30370ba86bed048ecbd9fddf4c02242cd2fe))
+* **url:** simplify path types ([6c905b5](https://github.com/osovv/reatom/commit/6c905b5424a9d85c20059db04c3c03551cef9c5b))
+* **url:** sync links with location ([17e8b54](https://github.com/osovv/reatom/commit/17e8b54d3990745dc2498ac60eef0e0d95dd5fb2))
+* **url:** updateFromSource indirect check ([05b55ec](https://github.com/osovv/reatom/commit/05b55ecf973dbb43e91226390bdf102c17455f88))
+* **url:** use spy in match ([0a8320c](https://github.com/osovv/reatom/commit/0a8320c02ef8036816c3361fae852eaf159b359c))
+
 ## [3.8.0](https://github.com/artalar/reatom/compare/url-v3.7.5...url-v3.8.0) (2024-11-05)
 
 
