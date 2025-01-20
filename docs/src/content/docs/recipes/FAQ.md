@@ -5,7 +5,7 @@ description: Frequently asked questions about Reatom
 
 ## Package Updates
 
-When updating Reatom packages, you may encounter type incompatibilities or unexpected runtime errors due to your package manager's deduplication policy. Some Reatom packages are singletons, like [@reatom/effects](/packages/effects) with its internal `CauseContext`. However, there are no standards for this type of package, and different package managers may deduplicate them differently.
+When updating Reatom packages, you may encounter type incompatibilities or unexpected runtime errors due to your package manager's deduplication policy. Some Reatom packages are singletons, like [@reatom/effects](/package/effects) with its internal `CauseContext`. However, there are no standards for this type of package, and different package managers may deduplicate them differently.
 
 Therefore, we recommend running deduplication manually after updating Reatom packages. For example, if you have installed `@reatom/framework` and `@reatom/web`, and you want to update the framework to the latest version, use one of the following commands:
 
