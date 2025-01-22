@@ -14,12 +14,13 @@ import {
 } from '@reatom/framework'
 import { h, mount, ctx } from '@reatom/jsx'
 import { withLocalStorage } from '@reatom/persist-web-storage'
-import { Graph } from './Graph'
-import { getColor } from './Graph/utils'
-import { update } from './Graph/reatomInspector'
+import { Graph, update } from './Graph'
+import { getColor } from './utils'
 import { States } from './States'
 
 export { getColor }
+
+// import('@reatom/framework').then(({ connectLogger }) => connectLogger(ctx, { skipUnnamed: false }))
 
 export interface DevtoolsOptions {
   separator?: string | RegExp | ((name: string) => Array<string>)
@@ -110,9 +111,10 @@ export const _connectDevtools = async (
           height(ctx, folded.height)
           folded = null
         } else {
-          const { width: w, height: h } = containerEl.getBoundingClientRect()
+          const rect = containerEl.getBoundingClientRect()
+          const { width: w, height: h } = rect
           if (w + h < 400) {
-            width(ctx, `${window.innerWidth / 2}px`)
+            width(ctx, `${window.innerWidth / 1.5}px`)
             height(ctx, `${window.innerHeight * 0.9}px`)
           } else {
             folded = { width: `${w}px`, height: `${h}px` }
