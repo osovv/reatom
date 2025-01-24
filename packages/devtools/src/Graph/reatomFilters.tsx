@@ -113,22 +113,27 @@ const FilterView = ({ filter, remove }: { filter: Filter; remove?: Fn<[Ctx]> }) 
           &:hover {
             border: 4px solid #151134;
           }
+          &:before {
+            position: absolute;
+            content: '';
+            width: 100%;
+            height: 100%;
+            background: ${icons.paintIconBucket};
+            background-size: 80%;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 1;
+            pointer-events: none;
+          }
+
+          & input {
+            opacity: 0;
+          }
+
           &[data-highlight] {
             border: 4px double #151134;
-          }
-          &:not([data-highlight]) {
-            input {
-              opacity: 0;
-            }
-            &:before {
-              position: absolute;
-              content: '';
-              width: 100%;
-              height: 100%;
-              background: ${icons.paintIconBucket};
-              background-size: 80%;
-              background-repeat: no-repeat;
-              background-position: center;
+            & input {
+              opacity: 1;
             }
           }
         `}

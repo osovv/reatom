@@ -81,16 +81,18 @@ const EditForm = ({
 
 export const ObservableHQ: FC<{
   snapshot: Atom | {}
+  subscribe?: boolean
   update?: (newState: any) => any
   name?: string
   patch?: AtomCache
 }> = ({
   snapshot,
+  subscribe = false,
   update,
   patch,
   name = isAtom(snapshot) ? `${snapshot.__reatom.name}.ObservableHQ` : __count('ObservableHQ'),
 }) => {
-  const state: AtomMut = isAtom(snapshot)
+  const state: AtomMut = subscribe
     ? atom(null, `${name}.state`).pipe(withComputed((ctx) => ctx.spy(snapshot as Atom)))
     : atom(snapshot, `${name}.state`)
 
