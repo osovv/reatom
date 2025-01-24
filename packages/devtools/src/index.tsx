@@ -169,6 +169,10 @@ export const _connectDevtools = async (
 
   const containerEl = (
     <div
+      id={name}
+      css:devtools-bg="hsl(244deg 20% 90%)"
+      css:width={width}
+      css:height={height}
       css={`
         all: initial;
         position: fixed;
@@ -180,10 +184,10 @@ export const _connectDevtools = async (
         z-index: ${MAX_Z};
         background: var(--devtools-bg);
         will-change: width, height;
+        font-size: 14px;
+        font-family: monospace;
+        box-sizing: border-box;
       `}
-      css:devtools-bg="hsl(244deg 20% 90%)"
-      css:width={width}
-      css:height={height}
     >
       {logo}
       {viewSwitchEl}

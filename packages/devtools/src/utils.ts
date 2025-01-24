@@ -57,12 +57,13 @@ export const buttonCss = css`
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
-  background: none;
   height: 30px;
+  padding: 2px 4px;
+  font-size: 12px;
+  background: none;
+  box-sizing: border-box;
   border: 2px solid #151134;
   border-radius: 2px;
-  padding: 2px 4px;
   outline: none;
   &:focus,
   &:not([disabled]):hover {

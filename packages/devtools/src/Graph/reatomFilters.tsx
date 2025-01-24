@@ -256,8 +256,8 @@ const Checkbox = (props: JSX.IntrinsicElements['input']) => (
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 12px;
-        height: 12px;
+        width: 14px;
+        height: 14px;
         border-radius: 2px;
         background: #e1e0eb;
         border: 1px solid #151134;
@@ -268,8 +268,8 @@ const Checkbox = (props: JSX.IntrinsicElements['input']) => (
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 10px;
-        height: 10px;
+        width: 12px;
+        height: 12px;
         background: #151134;
         clip-path: polygon(14% 44%, 0 65%, 50% 90%, 90% 16%, 70% 0%, 43% 62%);
       }

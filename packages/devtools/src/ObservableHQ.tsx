@@ -92,9 +92,9 @@ export const ObservableHQ: FC<{
   patch,
   name = isAtom(snapshot) ? `${snapshot.__reatom.name}.ObservableHQ` : __count('ObservableHQ'),
 }) => {
-  const state: AtomMut = subscribe
-    ? atom(null, `${name}.state`).pipe(withComputed((ctx) => ctx.spy(snapshot as Atom)))
-    : atom(snapshot, `${name}.state`)
+  const state = atom<any>(null, `${name}.state`)
+  if (subscribe) state.pipe(withComputed((ctx) => ctx.spy(snapshot as Atom)))
+  else state.pipe(withInit(() => snapshot))
 
   const json = atom((ctx) => {
     try {
