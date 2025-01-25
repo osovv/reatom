@@ -1,7 +1,7 @@
 import { action, Atom, AtomMut, createCtx, Ctx, Fn, isAtom, Rec, throwReatomError, Unsubscribe } from '@reatom/core'
 import { isObject, random } from '@reatom/utils'
 import { type LinkedList, type LLNode, isLinkedListAtom, LL_NEXT } from '@reatom/primitives'
-import type { JSX } from './jsx'
+import type { AttributesAtomMaybe, JSX } from './jsx'
 
 declare type JSXElement = JSX.Element
 
@@ -179,32 +179,41 @@ export const reatomJsx = (ctx: Ctx, DOM: DomApis = globalThis.window) => {
 
     if (tag === hf) {
       const fragment = DOM.document.createDocumentFragment()
-      children = children.map((child) => isAtom(child) ? walkAtom(ctx, child) : child)
-      fragment.append(...children)
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i]
+        fragment.append(isAtom(child) ? walkAtom(ctx, child) : child)
+      }
       return fragment
     }
 
     props ??= {}
 
-    if (typeof tag === 'function') {
-      if (children.length) {
-        props.children = children
-      }
+    let element: JSX.Element
 
-      let _name = name
-      try {
-        name = tag.name
-        return tag(props)
-      } finally {
-        name = _name
+    if (typeof tag === 'function') {
+      if (tag === Bind) {
+        element = props.element
+        props.element = undefined
+      } else {
+        if (children.length) {
+          props.children = children
+        }
+
+        let _name = name
+        try {
+          name = tag.name
+          return tag(props)
+        } finally {
+          name = _name
+        }
       }
+    } else {
+      element = tag.startsWith('svg:')
+        ? DOM.document.createElementNS('http://www.w3.org/2000/svg', tag.slice(4))
+        : DOM.document.createElement(tag)
     }
 
     if ('children' in props) children = props.children
-
-    let element: JSX.Element = tag.startsWith('svg:')
-      ? DOM.document.createElementNS('http://www.w3.org/2000/svg', tag.slice(4))
-      : DOM.document.createElement(tag)
 
     for (let k in props) {
       if (k !== 'children') {
@@ -324,3 +333,7 @@ export const css = (strings: TemplateStringsArray, ...values: any[]) => {
   }
   return result
 }
+
+export const Bind = <T extends Element>(
+  props: { element: T } & AttributesAtomMaybe<Partial<Omit<T, 'children'>> & JSX.DOMAttributes<T>>,
+): T => props.element

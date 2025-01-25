@@ -3,8 +3,9 @@ import { createTestCtx, mockFn, type TestCtx } from '@reatom/testing'
 import { type Fn, type Rec, atom } from '@reatom/core'
 import { reatomLinkedList } from '@reatom/primitives'
 import { isConnected } from '@reatom/hooks'
-import { reatomJsx, type JSX } from '.'
 import { sleep } from '@reatom/utils'
+
+import { Bind, reatomJsx, type JSX } from '.'
 
 type SetupFn = (
   ctx: TestCtx,
@@ -736,5 +737,48 @@ it(
     bool1Atom(ctx, false)
     bool2Atom(ctx, false)
     assert.is(element.innerHTML, expect1)
+  }),
+)
+
+it(
+  'Bind',
+  setup(async (ctx, h, hf, mount, parent) => {
+    const div = (<div />) as HTMLDivElement
+    const input = (<input />) as HTMLInputElement
+    const svg = (<svg:svg />) as SVGSVGElement
+
+    const inputState = atom('42')
+
+    const testDiv = (
+      <Bind
+        element={div}
+        // @ts-expect-error there should be an error here
+        value={inputState}
+      />
+    )
+    const testInput = (
+      <Bind element={input} value={inputState} on:input={(ctx, e) => inputState(ctx, e.currentTarget.value)} />
+    )
+    const testSvg = (
+      <Bind element={svg}>
+        <svg:path d="M 10 10 H 100" />
+      </Bind>
+    )
+
+    mount(
+      parent,
+      <main>
+        {testDiv}
+        {testInput}
+        {testSvg}
+      </main>,
+    )
+
+    await sleep()
+
+    inputState(ctx, '43')
+
+    assert.is(input.value, '43')
+    assert.is(testSvg.innerHTML, '<path d="M 10 10 H 100"></path>')
   }),
 )
