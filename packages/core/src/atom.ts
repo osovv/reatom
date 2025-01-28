@@ -201,7 +201,7 @@ export interface CtxOptions {
 
 const getRootCause = (cause: AtomCache): AtomCache => (cause.cause === null ? cause : getRootCause(cause.cause))
 
-const isBrowser = () => !!globalThis.navigator?.userAgent
+const isBrowser = () => typeof window === 'object' && typeof document === 'object'
 
 let initiations = 0
 
