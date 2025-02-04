@@ -13,7 +13,7 @@ export const getColor = ({ proto }: AtomCache): string =>
 export const getStartCause = (cause: AtomCache): AtomCache =>
   cause.cause?.cause == null ? cause : getStartCause(cause.cause)
 
-const idxMap = new WeakMap<AtomCache, string>()
+export const idxMap = new WeakMap<AtomCache, string>()
 let idx = 0
 export const getId = (node: AtomCache) => {
   let id = idxMap.get(node)

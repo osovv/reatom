@@ -13,12 +13,22 @@ import {
   action,
   AtomProto,
   reatomBoolean,
+  isShallowEqual,
+  CtxSpy,
+  getCause,
 } from '@reatom/framework'
-import { h, hf, ctx } from '@reatom/jsx'
-import { actionsStates, followingsMap, getColor, getId, history } from './utils'
+import { h, hf, ctx, Bind } from '@reatom/jsx'
+import { actionsStates, followingsMap, getColor, getId, history, idxMap } from './utils'
 import { Filter, reatomFilters } from './Graph/reatomFilters'
 import { reatomLines } from './Graph/reatomLines'
 import { ObservableHQ } from './ObservableHQ'
+
+const memo =
+  <T,>(reducer: (ctx: CtxSpy) => T) =>
+  (ctx: CtxSpy, state?: T): T => {
+    const newState = reducer(ctx)
+    return isShallowEqual(state, newState) ? (state as T) : newState
+  }
 
 type Props = {
   clientCtx: Ctx
@@ -37,6 +47,51 @@ export const update = action((ctx, proto: AtomProto, value: string) => {
   })
 }, 'ReatomDevtools.update')
 
+const Stack = ({ patch }: { patch: AtomCache }) => {
+  const stackEl = (
+    <span
+      aria-details={`${patch.proto.name} stack trace`}
+      css={`
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-left: 50px;
+      `}
+    />
+  )
+
+  let cause = patch.cause
+  while (cause && cause.proto.name !== 'root') {
+    const causeId = idxMap.get(cause)
+    const causeEl = causeId && document.getElementById(causeId)
+
+    stackEl.append(
+      <span>
+        {' ^ '}
+        {causeEl ? (
+          <a
+            href={`#${causeId}`}
+            on:click={(ctx, e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              causeEl.scrollIntoView()
+              causeEl.focus()
+            }}
+          >
+            {cause.proto.name}
+          </a>
+        ) : (
+          cause.proto.name!
+        )}
+      </span>,
+    )
+
+    cause = cause.cause
+  }
+
+  return stackEl
+}
+
 export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) => {
   const name = '_ReatomDevtools.Graph'
 
@@ -48,9 +103,25 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
           let ms: number | string = new Date().getMilliseconds()
           ms = ms.toString().padStart(3, '0')
 
+          const nodesToWatch = atom(new Array<Atom>())
+          const display = atom((ctx) =>
+            ctx.spy(nodesToWatch).every((styleAtom) => ctx.spy(styleAtom).display === 'none') ? 'none' : 'flex',
+          )
+
           return (
             <li
-              data-timestamp
+              ref={(ctx, el) => {
+                nodesToWatch(ctx, (state) => {
+                  state = []
+                  let next = el.nextElementSibling
+                  while (next?.id && 'styleAtom' in next) {
+                    state.push(next.styleAtom as Atom)
+                    next = next.nextElementSibling
+                  }
+                  return state
+                })
+              }}
+              style:display={display}
               css={`
                 display: flex;
                 justify-content: center;
@@ -86,61 +157,63 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
 
         let stringState: string
 
-        const style = atom((ctx) => {
-          let display = 'list-item'
-          let background = 'none'
+        const style = atom(
+          memo((ctx) => {
+            const state = { display: 'flex', background: 'none' }
 
-          const exclude = ctx.spy(filters.exclude)
+            const exclude = ctx.spy(filters.exclude)
 
-          if (exclude && new RegExp(`.*${exclude}.*`, 'i').test(name!)) {
-            display = 'none'
-          }
-
-          const applyFilter = ({ search, active, type, color }: Filter) => {
-            if (!ctx.spy(active)) return
-
-            const _type = ctx.spy(type)
-
-            try {
-              const searchValue = ctx.spy(search)
-              const result = !searchValue || new RegExp(`.*${searchValue}.*`, 'i').test(name!)
-
-              if (_type === 'filter' && !result) {
-                display = 'none'
-              }
-              if (_type === 'hide' && result) {
-                display = 'none'
-              }
-
-              if (_type === 'highlight' && result) {
-                background = `${ctx.spy(color)}a0`
-              }
-            } catch {}
-          }
-
-          applyFilter(filters.search)
-          const filtersList = ctx.spy(filters.list.array)
-          for (let i = 0; i < filtersList.length; i++) {
-            if (display === 'none') break
-            applyFilter(filtersList[i]!)
-          }
-
-          const search = ctx.spy(valuesSearch)
-          if (search) {
-            stringState ??= toStringKey(patch.state)
-              .replace(/\[reatom .*?\]/g, `\n`)
-              .toLowerCase()
-
-            if (!stringState.includes(search)) {
-              display = 'none'
+            if (exclude && new RegExp(`.*${exclude}.*`, 'i').test(name!)) {
+              state.display = 'none'
+              return state
             }
-          }
 
-          return {
-            display,
-            background,
-          }
-        }, `${name}._Log.style`)
+            const applyFilter = ({ search, active, type, color }: Filter) => {
+              if (!ctx.spy(active)) return
+
+              const _type = ctx.spy(type)
+
+              try {
+                const searchValue = ctx.spy(search)
+                const result = !searchValue || new RegExp(`.*${searchValue}.*`, 'i').test(name!)
+
+                if (_type === 'filter' && !result) {
+                  state.display = 'none'
+                }
+                if (_type === 'hide' && result) {
+                  state.display = 'none'
+                }
+
+                if (_type === 'highlight' && result) {
+                  state.background = `${ctx.spy(color)}a0`
+                }
+              } catch {}
+            }
+
+            applyFilter(filters.search)
+            if (state.display === 'none') return state
+
+            const filtersList = ctx.spy(filters.list.array)
+            for (let i = 0; i < filtersList.length; i++) {
+              applyFilter(filtersList[i]!)
+              if (state.display === 'none') return state
+            }
+
+            const search = ctx.spy(valuesSearch)
+            if (search) {
+              stringState ??= toStringKey(patch.state)
+                .replace(/\[reatom .*?\]/g, `\n`)
+                .toLowerCase()
+
+              if (!stringState.includes(search)) {
+                state.display = 'none'
+              }
+            }
+
+            return state
+          }),
+          `${name}._Log.style`,
+        )
 
         const handleChain = (ctx: Ctx) => {
           lines.highlight(ctx, { svg, patch })
@@ -148,11 +221,15 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
 
         const preview = reatomBoolean(false, `${name}._Log.preview`)
 
-        return (
+        const showStack = reatomBoolean(false, `${name}._Log.showStack`)
+
+        const element = (
           <li
             id={id}
             style={style}
             css={`
+              flex-wrap: wrap;
+              align-items: center;
               padding: 5px;
               font-size: 16px;
               &::marker {
@@ -161,41 +238,55 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
             `}
           >
             <button
-              title="Cause lines"
-              aria-label="Draw a cause lines"
-              on:click={handleChain}
-              css:type={color}
+              title="Toggle stack trace"
+              aria-label="Toggle visibility of atom's stack trace"
+              role="switch"
+              aria-pressed={showStack}
+              on:click={(ctx, e) => {
+                e.currentTarget.innerText = showStack.toggle(ctx) ? 'X' : '?'
+              }}
               css={`
                 border: none;
                 background: none;
-                font-size: 18px;
-                padding: 0;
-                color: var(--type);
                 margin-left: 10px;
-                margin-right: 5px;
               `}
             >
-              ⛓
+              ?
             </button>
             <button
-              title="Inspector"
-              aria-label="Open inspector"
-              on:click={preview.toggle}
-              css:type={color}
-              // css:display={atom((ctx) => (ctx.spy(filters.preview) ? 'none' : 'inline'))}
+              title="Highlight cause lines"
+              aria-label="Visualize causal relationships between atoms"
+              on:click={handleChain}
+              style:color={color}
               css={`
-                /* display: var(--display); */
                 border: none;
                 background: none;
-                font-size: 16px;
-                padding: 0px;
-                margin-right: 5px;
-                color: var(--type);
               `}
             >
-              🗐
+              &
             </button>
-            {name}
+            <label
+              title="Toggle inspector"
+              css={`
+                cursor: pointer;
+                margin-right: 10px;
+              `}
+            >
+              <input
+                type="checkbox"
+                css={`
+                  position: absolute;
+                  opacity: 0;
+                  cursor: pointer;
+                  height: 0;
+                  width: 0;
+                `}
+                model:checked={preview}
+                aria-label={`Toggle inspector for ${name}`}
+              />
+              {name}
+            </label>
+            {atom((ctx) => (ctx.spy(showStack) ? <Stack patch={patch} /> : null))}
             {atom((ctx) =>
               ctx.spy(filters.preview) || ctx.spy(preview) ? (
                 <ObservableHQ
@@ -209,6 +300,8 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
             )}
           </li>
         )
+
+        return Object.assign(element, { styleAtom: style })
       },
     },
     `${name}.list`,
@@ -321,7 +414,7 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
         width: calc(100% - 70px);
         height: var(--height);
         top: 0;
-        left: 68px;
+        left: 60px;
         pointer-events: var(--pe);
         will-change: height;
       `}
@@ -337,9 +430,9 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
         padding: 0;
         content-visibility: auto;
 
-        & [data-timestamp] + [data-timestamp] {
+        /* & [data-stack] + [data-stack] {
           display: none;
-        }
+        } */
       `}
     >
       {list}
