@@ -15,10 +15,9 @@ import {
   reatomBoolean,
   isShallowEqual,
   CtxSpy,
-  getCause,
 } from '@reatom/framework'
 import { h, hf, ctx, Bind } from '@reatom/jsx'
-import { actionsStates, followingsMap, getColor, getId, history, idxMap } from './utils'
+import { actionsStates, followingsMap, getColor, getId, historyStates, idxMap } from './utils'
 import { Filter, reatomFilters } from './Graph/reatomFilters'
 import { reatomLines } from './Graph/reatomLines'
 import { ObservableHQ } from './ObservableHQ'
@@ -77,6 +76,8 @@ const Stack = ({ patch }: { patch: AtomCache }) => {
               causeEl.scrollIntoView()
               causeEl.focus()
             }}
+            // @ts-expect-error
+            style:color={atom((ctx) => (ctx.spy(causeEl.styleAtom).display === 'none' ? 'black' : undefined))}
           >
             {cause.proto.name}
           </a>
@@ -94,6 +95,8 @@ const Stack = ({ patch }: { patch: AtomCache }) => {
 
 export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) => {
   const name = '_ReatomDevtools.Graph'
+
+  const isBottom = reatomBoolean(false, `${name}.isBottom`)
 
   const list = reatomLinkedList(
     {
@@ -149,8 +152,6 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
         if (isAction) {
           state = actionsStates.get(patch)
           if (state.length === 1) state = state[0]
-        } else {
-          history.add(patch)
         }
         const id = getId(patch)
         const color = getColor(patch)
@@ -257,7 +258,6 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
               title="Highlight cause lines"
               aria-label="Visualize causal relationships between atoms"
               on:click={handleChain}
-              style:color={color}
               css={`
                 border: none;
                 background: none;
@@ -267,6 +267,7 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
             </button>
             <label
               title="Toggle inspector"
+              style:color={color}
               css={`
                 cursor: pointer;
                 margin-right: 10px;
@@ -336,34 +337,38 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
     return `${listEl.getBoundingClientRect().height}px`
   }, `${name}.listHeight`).pipe(withDataAtom('0px')).dataAtom
 
-  // const subscribe = () =>
+  const read = clientCtx.get((read) => read)
   clientCtx.subscribe(async (logs) => {
     // sort causes and insert only from this transaction
     const insertTargets = new Set<AtomCache>()
+    const inits = new Map<AtomProto, AtomCache>()
     for (let i = 0; i < logs.length; i++) {
       const patch = logs[i]!
+
       insertTargets.add(patch)
+
       if (patch.proto.isAction) actionsStates.set(patch, patch.state.slice(0))
+      else historyStates.add(patch)
+
+      if (!read(patch.proto) && !inits.has(patch.proto)) {
+        inits.set(patch.proto, patch)
+      }
     }
 
     await null
 
     let isTimeStampWritten = !ctx.get(filters.time)
 
-    const isPass = (patch: AtomCache) => {
-      const historyState = history.get(patch.proto)
-      const [prev] = historyState ?? []
+    const isPass = (patch: AtomCache): boolean => {
+      if (inits.get(patch.proto) === patch || (patch.proto.isAction && !actionsStates.get(patch)?.length)) {
+        return false
+      }
 
-      const isConnection =
-        (patch.proto.isAction && !actionsStates.get(patch)?.length) ||
-        (!historyState && patch.cause!.proto.name === 'root')
-
-      if (!historyState) history.set(patch.proto, [])
-
+      const historyState = historyStates.get(patch.proto) ?? []
+      const prev = historyState[historyState.indexOf(patch) + 1]
       const exclude = ctx.get(filters.exclude)
 
       const result =
-        !isConnection &&
         prev !== patch &&
         (!prev || !Object.is(patch.state, prev.state)) &&
         (!exclude || !new RegExp(`.*${exclude}.*`, 'i').test(patch.proto.name!))
@@ -395,10 +400,7 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
       }
 
       requestAnimationFrame(() => {
-        const isBottom =
-          listEl.parentElement!.scrollHeight - listEl.parentElement!.scrollTop < listEl.parentElement!.clientHeight + 10
-
-        if (isBottom) {
+        if (ctx.get(isBottom)) {
           listEl.parentElement!.scrollTop = listEl.parentElement!.scrollHeight
         }
       })
@@ -458,6 +460,11 @@ export const Graph = ({ clientCtx, getColor, width, height, initSize }: Props) =
           position: relative;
           margin-top: 2px;
         `}
+        on:scroll={(ctx, e) => {
+          const isBottomState =
+            e.currentTarget.scrollHeight - e.currentTarget.scrollTop < e.currentTarget.clientHeight + 10
+          if (ctx.get(isBottom) !== isBottomState) isBottom(ctx, isBottomState)
+        }}
       >
         {svg}
         {listEl}

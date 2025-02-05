@@ -254,7 +254,8 @@ export const createDevtools = ({
   const state: Devtools['state'] = (name, initState) => {
     let target = cache.get(name) as AtomMut | undefined
     if (!target) {
-      cache.set(name, (target = atom(initState, name)))
+      cache.set(name, (target = atom(123, name)))
+      target(clientCtx, initState)
     } else if (ctx.get(target) !== initState) {
       target(clientCtx, initState)
     }
