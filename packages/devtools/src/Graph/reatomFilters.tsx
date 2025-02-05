@@ -354,6 +354,9 @@ export const reatomFilters = (
   const FiltersComponent = () => (
     <div
       css={`
+        flex-shrink: 0;
+        max-height: 40%;
+        overflow: auto;
         & input::placeholder {
           color: currentColor;
           opacity: 0.8;
