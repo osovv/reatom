@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.12.0](https://github.com/osovv/reatom/compare/primitives-v3.11.0...primitives-v3.12.0) (2025-06-09)
+
+
+### Features
+
+* **form:** add centralized fields initialization, add support for array fields, add `withField` ([#1038](https://github.com/osovv/reatom/issues/1038)) ([3da17df](https://github.com/osovv/reatom/commit/3da17df7c91c5ab8a5b17bd5a2cadd4792df340a))
+* **primitives:** add `push`, `pop`, `shift`, `unshift`, `slice` for `reatomArray` ([#1034](https://github.com/osovv/reatom/issues/1034)) ([47fc530](https://github.com/osovv/reatom/commit/47fc530990449fdeffcc605ca6c07e8d18bce4b9))
+* **primitives:** add `sizeAtom` to `reatomMap` ([#1035](https://github.com/osovv/reatom/issues/1035)) ([2b416b3](https://github.com/osovv/reatom/commit/2b416b3d0d498ab353993d2d7803dd683001add3))
+* **primitives:** add getOrCreate to reatomMap ([a6f9d48](https://github.com/osovv/reatom/commit/a6f9d4843e7e983d1a37b0c3a85214642a4d0925))
+* **primitives:** add map atom to LinkedListAtom ([fc58024](https://github.com/osovv/reatom/commit/fc580241e3867040a4513690a6b976d39f3ac6c0))
+* **primitives:** add new set methods and tests for reatomSet ([#866](https://github.com/osovv/reatom/issues/866)) ([a8ae20f](https://github.com/osovv/reatom/commit/a8ae20f9abe8adbde4e4c44247578a00b227e5e3))
+* **primitives:** add reatomLinkedList ([0987d83](https://github.com/osovv/reatom/commit/0987d83df0aec36996ce16a8890012773358c7ac))
+* **primitives:** add sizeAtom for reatomSet ([0e552d7](https://github.com/osovv/reatom/commit/0e552d7e5be1c050c308a23940c922eecbb3f368))
+* **primitives:** add static `LinkedList` factory for `reatomLinkedList` ([#1055](https://github.com/osovv/reatom/issues/1055)) ([2634b6f](https://github.com/osovv/reatom/commit/2634b6f460b735ef5916947274e93a8b655c0aff))
+* **primitives:** add withAssign, deprecate withReducers ([3ac66fc](https://github.com/osovv/reatom/commit/3ac66fc76fffa4ef05e9782d93c982020188196f))
+* **primitives:** add withComputed ([055a5a7](https://github.com/osovv/reatom/commit/055a5a72524a5ce147ebbb1d7cbb4af7c9d88ca3))
+* **primitives:** constructor as initializer for primitives ([#1049](https://github.com/osovv/reatom/issues/1049)) ([5657158](https://github.com/osovv/reatom/commit/5657158aebbc0f7cbe03caa1cf97bb6df9a1af1f))
+
+
+### Bug Fixes
+
+* add the 'size' prop to reatomSet ([#892](https://github.com/osovv/reatom/issues/892)) ([76d9a98](https://github.com/osovv/reatom/commit/76d9a986e2e897119a3708a117cc849ccd65f234))
+* esm module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/osovv/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **primitives:** linked list batch ([1fd859c](https://github.com/osovv/reatom/commit/1fd859c7309e4e398a578a1b278fdded434c026b))
+* **primitives:** remove in ll ([e78a049](https://github.com/osovv/reatom/commit/e78a049faf52e6924f74acc2907d16701517423c))
+* **primitives:** swap in ll ([315df22](https://github.com/osovv/reatom/commit/315df224f9a17203905e7a10f5f0082812415244))
+
 ## [3.11.0](https://github.com/reatom/reatom/compare/primitives-v3.10.0...primitives-v3.11.0) (2025-05-19)
 
 

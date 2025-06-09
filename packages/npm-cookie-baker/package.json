@@ -1,6 +1,6 @@
 {
   "name": "@reatom/npm-cookie-baker",
-  "version": "3.1.5",
+  "version": "3.1.6",
   "private": false,
   "sideEffects": false,
   "description": "Reatom for cookies by cookie-baker",
@@ -44,5 +44,7 @@
     "url": "https://github.com/artalar/reatom/issues"
   },
   "homepage": "https://www.reatom.dev/package/npm-cookie-baker",
-  "files": ["/build"]
+  "files": [
+    "/build"
+  ]
 }

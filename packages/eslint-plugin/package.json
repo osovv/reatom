@@ -1,6 +1,6 @@
 {
   "name": "@reatom/eslint-plugin",
-  "version": "3.8.0",
+  "version": "3.9.0",
   "publishConfig": {
     "tag": "experimental"
   },
@@ -52,7 +52,9 @@
     "url": "https://github.com/artalar/reatom/issues"
   },
   "homepage": "https://www.reatom.dev/package/eslint-plugin",
-  "files": ["/build"],
+  "files": [
+    "/build"
+  ],
   "devDependencies": {
     "@types/eslint": "^9.0.0",
     "eslint": "^9.21.0"

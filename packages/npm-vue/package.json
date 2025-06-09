@@ -1,6 +1,6 @@
 {
   "name": "@reatom/npm-vue",
-  "version": "3.6.1",
+  "version": "3.7.0",
   "private": false,
   "sideEffects": false,
   "description": "Reatom adapter for Vue",
@@ -55,7 +55,9 @@
     "state-manager",
     "reatom"
   ],
-  "files": ["/build"],
+  "files": [
+    "/build"
+  ],
   "devDependencies": {
     "@reatom/hooks": "^3.5.2"
   },

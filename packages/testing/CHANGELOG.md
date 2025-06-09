@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.4.10](https://github.com/osovv/reatom/compare/testing-v3.4.9...testing-v3.4.10) (2025-06-09)
+
+
+### Bug Fixes
+
+* esm module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/osovv/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **testing:** callSafelySilent ([d80f013](https://github.com/osovv/reatom/commit/d80f0132542b5dad732228e0c49bf807dfc916ae))
+* **testing:** prevent first computed reading of mocked atom [#995](https://github.com/osovv/reatom/issues/995) ([5231d20](https://github.com/osovv/reatom/commit/5231d20cbbbc2ffeefb52e574f9f281273e0e8e1))
+* **testing:** restrictMultipleContexts ([7abb8db](https://github.com/osovv/reatom/commit/7abb8dbf470b57c2a7ffc4333add6fab9a0d193a))
+
 ## [3.4.9](https://github.com/artalar/reatom/compare/testing-v3.4.8...testing-v3.4.9) (2025-03-14)
 
 

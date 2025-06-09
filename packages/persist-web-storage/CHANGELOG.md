@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.5.0](https://github.com/osovv/reatom/compare/persist-web-storage-v3.4.6...persist-web-storage-v3.5.0) (2025-06-09)
+
+
+### Features
+
+* **persist-web-storage:** add withCookie ([#830](https://github.com/osovv/reatom/issues/830)) ([25a865e](https://github.com/osovv/reatom/commit/25a865e58ca67ea230a5001a973132d3f76fc207))
+
+
+### Bug Fixes
+
+* **devtools:** build with vite ([#1062](https://github.com/osovv/reatom/issues/1062)) ([cc3a99d](https://github.com/osovv/reatom/commit/cc3a99ded95499b731fd497aae3a2c8dc8701a14))
+* esm module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **new-package-template:** use mjs in module export ([1011671](https://github.com/osovv/reatom/commit/10116719dd92d8102352a39e4ed772b8173d8668))
+* **npm-svelte:** republish without tag ([93c7f7f](https://github.com/osovv/reatom/commit/93c7f7f5ec58247b1b3aec854cd83b0a0ecd6a6c))
+* **persist-web-storage:** availability of BroadcastChannel ([199d69a](https://github.com/osovv/reatom/commit/199d69a13a3b2b0eabc22bb5ffaaa8e025f40041))
+* **persist-web-storage:** fix cookie availability check ([#836](https://github.com/osovv/reatom/issues/836)) ([8da6fe3](https://github.com/osovv/reatom/commit/8da6fe364ff61403f4e6dd6239eb7923520d5143))
+* **persist-web-storage:** indexedDB is not defined ([e5a527b](https://github.com/osovv/reatom/commit/e5a527b12c60dbea3383a32154a5cd2352849ce1))
+* **persist-web-storage:** isWebStorageAvailable check ([3e21b28](https://github.com/osovv/reatom/commit/3e21b28e061bea255235498e803239183eea4243))
+* **persist-web-storage:** missing export reatomPersistIndexedDb ([#876](https://github.com/osovv/reatom/issues/876)) ([e007b7f](https://github.com/osovv/reatom/commit/e007b7f11136b358e3f6452ecd9b3f7ffb73d48d))
+* **persist-web-storage:** types ([ab0e826](https://github.com/osovv/reatom/commit/ab0e8261f39d81998bccc6425f3dee577143da7c))
+* **persist-web-storage:** types bundling ([971aed4](https://github.com/osovv/reatom/commit/971aed424c778e9fe82da8dbd71e5a6bf779ec1c))
+
 ## [3.4.6](https://github.com/artalar/reatom/compare/persist-web-storage-v3.4.5...persist-web-storage-v3.4.6) (2025-04-02)
 
 

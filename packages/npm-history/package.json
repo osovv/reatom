@@ -1,6 +1,6 @@
 {
   "name": "@reatom/npm-history",
-  "version": "3.1.8",
+  "version": "3.1.9",
   "private": false,
   "sideEffects": false,
   "description": "Reatom for npm-history",
@@ -42,5 +42,7 @@
     "url": "https://github.com/artalar/reatom/issues"
   },
   "homepage": "https://www.reatom.dev/package/npm-history",
-  "files": ["/build"]
+  "files": [
+    "/build"
+  ]
 }
