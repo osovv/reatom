@@ -1,6 +1,6 @@
 {
   "name": "@reatom/logger",
-  "version": "3.8.4",
+  "version": "3.9.0",
   "private": false,
   "sideEffects": false,
   "description": "A logger for the Reatom state manager",
@@ -35,5 +35,7 @@
     "url": "https://github.com/artalar/reatom/issues"
   },
   "homepage": "https://www.reatom.dev/package/logger",
-  "files": ["/build"]
+  "files": [
+    "/build"
+  ]
 }
